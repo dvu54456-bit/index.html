@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aimlock NhNam - Nhập Key</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, #1b1b2f, #0d0d17 70%);
+    color: #fff;
+    padding: 20px;
+  }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 30px 26px;
+    width: 100%;
+    max-width: 430px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+    animation: fadeIn .4s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg,#00d4ff,#7b5cff,#ff5c9e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: .5px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 12.5px;
+    color: #9a9ab8;
+    margin-bottom: 22px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #b8b8d0;
+  }
+  .row { margin-bottom: 16px; }
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: border .2s;
+  }
+  input:focus, select:focus { border-color: #7b5cff; }
+  button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(90deg,#00d4ff,#7b5cff);
+    transition: transform .15s, opacity .15s;
+  }
+  button:hover { transform: translateY(-1px); opacity: .92; }
+  button:active { transform: translateY(0); }
+  .error {
+    color: #ff5c7c;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 12px;
+    min-height: 18px;
+  }
+  .hidden { display: none !important; }
+
+  /* ===== APP ===== */
+  .app-header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .app-header h1 { font-size: 26px; }
+  .badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 12px;
+    font-size: 11px;
+    border-radius: 20px;
+    background: rgba(0,212,255,0.12);
+    border: 1px solid rgba(0,212,255,0.35);
+    color: #00d4ff;
+  }
+  .features { margin-top: 4px; }
+  .feature {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 14.5px;
+    transition: background .2s, border .2s;
+  }
+  .feature.active {
+    background: rgba(0,212,255,0.08);
+    border-color: rgba(0,212,255,0.4);
+  }
+  .feature .name { font-weight: 600; letter-spacing: .3px; }
+  .feature .desc { font-size: 11.5px; color: #8f8fb0; margin-top: 2px; }
+
+  /* Công tắc */
+  .switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .switch input { display: none; }
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 30px;
+    transition: .25s;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    width: 20px; height: 20px;
+    left: 3px; top: 3px;
+    border-radius: 50%;
+    background: #fff;
+    transition: .25s;
+  }
+  .switch input:checked + .slider { background: linear-gradient(90deg,#00d4ff,#7b5cff); }
+  .switch input:checked + .slider::before { transform: translateX(20px); }
+
+  /* Liên hệ */
+  .contact {
+    margin-top: 22px;
+    padding: 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,92,255,0.08));
+    border: 1px solid rgba(123,92,255,0.3);
+    text-align: center;
+  }
+  .contact .title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #9a9ab8;
+    margin-bottom: 10px;
+  }
+  .contact .ad { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .contact .ad span { color: #00d4ff; }
+  .zalo-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(90deg,#0068ff,#00a4ff);
+    box-shadow: 0 6px 20px rgba(0,104,255,0.35);
+    transition: transform .15s;
+  }
+  .zalo-btn:hover { transform: translateY(-2px); }
+
+  .logout-bar { margin-top: 18px; }
+  .logout-bar button {
+    background: rgba(255,80,80,0.18);
+    border: 1px solid rgba(255,80,80,0.35);
+    font-size: 13px;
+    padding: 10px;
+  }
+  .note {
+    margin-top: 14px;
+    font-size: 11px;
+    text-align: center;
+    color: #6c6c88;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== MÀN HÌNH NHẬP KEY ===== -->
+<div class="card" id="loginScreen">
+  <h1>AIMLOCK NHNAM</h1>
+  <p class="subtitle">Nhập key để truy cập ứng dụng</p>
+
+  <div class="row">
+    <label>Key của bạn</label>
+    <input type="text" id="keyInput" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off">
+  </div>
+
+  <button onclick="checkKey()">🔓 Xác nhận Key</button>
+  <div class="error" id="keyError"></div>
+
+  <div class="contact">
+    <div class="title">Liên hệ mua key</div>
+    <div class="ad">AD: <span>NhNam</span></div>
+    <div style="font-size:13.5px;color:#c8c8e0;">SĐT / Zalo: <b>0862721484</b></div>
+    <a class="zalo-btn" href="https://zalo.me/0862721484" target="_blank" rel="noopener">💬 Nhắn Zalo</a>
+  </div>
+</div>
+
+<!-- ===== APP (ẩn ban đầu) ===== -->
+<div class="card hidden" id="appScreen">
+  <div class="app-header">
+    <h1>AIMLOCK NHNAM</h1>
+    <div class="badge">✅ Đã kích hoạt</div>
+  </div>
+
+  <div class="features" id="features">
+    <div class="feature" data-f="aimlock">
+      <div>
+        <div class="name">🎯 Aimlock</div>
+        <div class="desc">Khóa mục tiêu tự động</div>
+      </div>
+      <label class="switch"><input type="checkbox" onchange="toggleFeature(this)"><span class="slider"></span></label>
+    </div>
+
+    <div class="feature" data-f="nhetam">
+      <div>
+        <div class="name">🪶 Nhẹ Tâm</div>
+        <div class="desc">Giảm rung, bắn êm tay</div>
+      </div>
+      <label class="switch"><input type="checkbox" onchange="toggleFeature(this)"><span class="slider"></span></label>
+    </div>
+
+    <div class="feature" data-f="nhyaman">
+      <div>
+        <div class="name">⚡ Nhạy Màn</div>
+        <div class="desc">Tăng độ nhạy cảm ứng</div>
+      </div>
+      <label class="switch"><input type="checkbox" onchange="toggleFeature(this)"><span class="slider"></span></label>
+    </div>
+
+    <div class="feature" data-f="damtam">
+      <div>
+        <div class="name">🎯 Đầm Tâm</div>
+        <div class="desc">Tâm bắn ổn định, chính xác</div>
+      </div>
+      <label class="switch"><input type="checkbox" onchange="toggleFeature(this)"><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <div class="contact">
+    <div class="title">Liên hệ hỗ trợ</div>
+    <div class="ad">AD: <span>NhNam</span></div>
+    <div style="font-size:13.5px;color:#c8c8e0;">SĐT / Zalo: <b>0862721484</b></div>
+    <a class="zalo-btn" href="https://zalo.me/0862721484" target="_blank" rel="noopener">💬 Nhắn Zalo</a>
+  </div>
+
+  <div class="logout-bar">
+    <button onclick="logout()">🚪 Đăng xuất</button>
+  </div>
+  <div class="note">Key được lưu trên thiết bị này</div>
+</div>
+
+<script>
+  /* ============================================================
+     ⚙️ CẤU HÌNH KEY — SỬA / THÊM KEY Ở ĐÂY
+     ============================================================ */
+  const VALID_KEYS = [
+    "TEST-KEY1-1234-5678"
+  ];
+
+  // Thời gian phiên (ms) — 7 ngày
+  const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
+
+  /* ===== KIỂM TRA KEY ===== */
+  function checkKey() {
+    const val = document.getElementById('keyInput').value.trim().toUpperCase();
+    const err = document.getElementById('keyError');
+
+    if (!val) {
+      err.textContent = '⚠️ Vui lòng nhập key!';
+      return;
+    }
+
+    if (VALID_KEYS.includes(val)) {
+      err.textContent = '';
+      localStorage.setItem('aimlock_key', val);
+      localStorage.setItem('aimlock_time', Date.now().toString());
+      showApp(val);
+    } else {
+      err.textContent = '❌ Key không hợp lệ! Liên hệ Zalo 0862721484 để mua key.';
+    }
+  }
+
+  function showApp(key) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appScreen').classList.remove('hidden');
+    document.getElementById('keyInput').value = '';
+  }
+
+  function logout() {
+    localStorage.removeItem('aimlock_key');
+    localStorage.removeItem('aimlock_time');
+    document.getElementById('appScreen').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('keyError').textContent = '';
+  }
+
+  /* ===== KIỂM TRA PHIÊN KHI TẢI LẠI ===== */
+  (function checkSession() {
+    const key = localStorage.getItem('aimlock_key');
+    const t = parseInt(localStorage.getItem('aimlock_time') || '0');
+    if (key && VALID_KEYS.includes(key) && Date.now() - t < SESSION_MS) {
+      showApp(key);
+    } else {
+      localStorage.removeItem('aimlock_key');
+    }
+  })();
+
+  /* ===== BẬT/TẮT CHỨC NĂNG ===== */
+  function toggleFeature(checkbox) {
+    const feature = checkbox.closest('.feature');
+    feature.classList.toggle('active', checkbox.checked);
+  }
+
+  /* Enter để xác nhận key */
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkKey();
+  });
+
+  /* Tự động format key khi gõ (thêm dấu - mỗi 4 ký tự) */
+  document.getElementById('keyInput').addEventListener('input', e => {
+    let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    let out = [];
+    for (let i = 0; i < v.length && out.length < 4; i += 4) {
+      out.push(v.substr(i, 4));
+    }
+    e.target.value = out.join('-');
+  });
+</script>
+</body>
+</html>
